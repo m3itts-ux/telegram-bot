@@ -16,6 +16,10 @@ async def start(update, context: ContextTypes.DEFAULT_TYPE) -> None:
 async def help_command(update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await update.message.reply_text("Я пока умею немного, но скоро научусь большему!")
 
+# Функция для обработки команды /about
+async def about(update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    await update.message.reply_text("Я бот созданный на Python. Умею отвечать на команды и скоро научусь большему!")
+
 def main() -> None:
     # Создаем приложение с токеном
     application = Application.builder().token(TOKEN).build()
@@ -23,6 +27,7 @@ def main() -> None:
     # Добавляем обработчики команд
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("help", help_command))
+    application.add_handler(CommandHandler("about", about))
 
     # Запускаем бота
     application.run_polling()
