@@ -1,4 +1,4 @@
-from telegram.ext import Application, CommandHandler, ContextTypes
+from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters
 from dotenv import load_dotenv
 import os
 
@@ -20,6 +20,14 @@ async def help_command(update, context: ContextTypes.DEFAULT_TYPE) -> None:
 async def about(update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await update.message.reply_text("Я бот созданный на Python. Умею отвечать на команды и скоро научусь большему!")
 
+# Функция для обработки текстовых сообщений
+async def handle_message(update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    text = update.message.text.lower()
+    if text == "привет":
+        await update.message.reply_text("Привет! Напиши /help чтобы узнать что я умею")
+    else:
+        await update.message.reply_text("Я пока не понимаю эту команду. Попробуй /help")
+
 def main() -> None:
     # Создаем приложение с токеном
     application = Application.builder().token(TOKEN).build()
@@ -28,6 +36,9 @@ def main() -> None:
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("help", help_command))
     application.add_handler(CommandHandler("about", about))
+
+    # Добавляем обработчик текстовых сообщений
+    application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 
     # Запускаем бота
     application.run_polling()
